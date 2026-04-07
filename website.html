@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIR NOVA — Smarter Cities. Cleaner Air.</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #03100a;
+  --bg2: #051610;
+  --card: #071e13;
+  --card2: #091f15;
+  --accent: #1aff8c;
+  --accent2: #00cfff;
+  --accent3: #b8ff6b;
+  --text: #e8f5ef;
+  --muted: #6b9e80;
+  --border: rgba(26,255,140,0.12);
+  --border2: rgba(0,207,255,0.12);
+  --glow: rgba(26,255,140,0.2);
+  --glow2: rgba(0,207,255,0.18);
+  --nav-h: 68px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ─── GRAIN ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0.5;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+/* ═══════════════════════════════
+   NAVIGATION
+═══════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(3,16,10,0.88);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+  z-index: 8000;
+  transition: all 0.3s;
+}
+nav.scrolled { background: rgba(3,16,10,0.97); }
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.brand-mark {
+  width: 38px; height: 38px;
+  background: conic-gradient(from 0deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 0 20px var(--glow);
+  animation: spin-slow 8s linear infinite;
+}
+@keyframes spin-slow {
+  to { filter: hue-rotate(360deg); }
+}
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 1.45rem;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-links a {
+  display: block;
+  padding: 8px 16px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--accent);
+  background: rgba(26,255,140,0.07);
+}
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.btn-pill {
+  padding: 9px 24px;
+  border-radius: 100px;
+  font-family: 'DM Sans', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif ;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(26,255,140,0.06);
+}
+.btn-solid {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #03100a;
+  box-shadow: 0 0 24px var(--glow);
+}
+.btn-solid:hover {
+  background: var(--accent3);
+  border-color: var(--accent3);
+  box-shadow: 0 0 40px rgba(184,255,107,0.4);
+  transform: translateY(-1px);
+}
+
+/* Hamburger */
+#ham {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 6px;
+}
+#ham span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+#ham.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+#ham.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+#ham.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+#mob-menu {
+  display: none;
+  position: fixed;
+  top: var(--nav-h);
+  left: 0; right: 0;
+  background: rgba(3,16,10,0.99);
+  backdrop-filter: blur(30px);
+  border-bottom: 1px solid var(--border);
+  z-index: 7999;
+  padding: 20px 32px 28px;
+  flex-direction: column;
+  gap: 4px;
+}
+#mob-menu.open { display: flex; }
+#mob-menu a {
+  display: block;
+  padding: 12px 16px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid var(--border);
+}
+#mob-menu a:last-child { border-bottom: none; }
+#mob-menu a:hover { color: var(--accent); background: rgba(26,255,140,0.06); padding-left: 24px; }
+
+/* ═══════════════════════════════
+   PAGES (SPA routing)
+═══════════════════════════════ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ═══════════════════════════════
+   HOME — HERO
+═══════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: calc(var(--nav-h) + 60px) 24px 80px;
+}
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=1600&q=85') center/cover no-repeat;
+  filter: brightness(0.15) saturate(0.5);
+  transform: scale(1.05);
+  animation: slow-zoom 20s ease-in-out infinite alternate;
+}
+@keyframes slow-zoom {
+  from { transform: scale(1.05); }
+  to   { transform: scale(1.12); }
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(26,255,140,0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 70%, rgba(0,207,255,0.07) 0%, transparent 60%),
+    linear-gradient(to bottom, rgba(3,16,10,0.3) 0%, rgba(3,16,10,0.7) 60%, var(--bg) 100%);
+}
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(26,255,140,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,255,140,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, rgba(0,0,0,0.8), transparent);
+}
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  animation: hero-in 1s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(26,255,140,0.07);
+  border: 1px solid rgba(26,255,140,0.2);
+  padding: 7px 20px;
+  border-radius: 100px;
+  margin-bottom: 32px;
+}
+.hero-eyebrow::before { content: '◉'; font-size: 0.6rem; animation: pulse 2s infinite; }
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 640px;
+  margin: 24px auto 44px;
+  font-weight: 400;
+}
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-hero {
+  padding: 15px 40px;
+  border-radius: 100px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  letter-spacing: 0.3px;
+}
+.btn-hero-primary {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #03100a;
+  box-shadow: 0 0 40px var(--glow);
+}
+.btn-hero-primary:hover {
+  background: var(--accent3);
+  transform: translateY(-3px);
+  box-shadow: 0 0 60px rgba(184,255,107,0.5), 0 12px 30px rgba(0,0,0,0.4);
+}
+.btn-hero-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--text);
+}
+.btn-hero-ghost:hover {
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(var(--accent), transparent);
+  animation: scroll-drop 2s ease-in-out infinite;
+}
+@keyframes scroll-drop {
+  0%,100% { opacity: 0.2; transform: scaleY(0.5) translateY(-10px); }
+  50% { opacity: 1; transform: scaleY(1) translateY(0); }
+}
+
+/* ─── STATS BAR ─── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 1100px;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: 0 0 60px rgba(0,0,0,0.5);
+}
+.stat-cell {
+  padding: 36px 28px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell:hover { background: rgba(26,255,140,0.04); }
+.stat-cell::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+.stat-cell:hover::before { transform: scaleX(1); }
+.stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin-bottom: 10px;
+}
+.stat-lbl {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* ─── SECTION WRAPPER ─── */
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.section-gap { padding: 110px 0; }
+.section-gap-sm { padding: 70px 0; }
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.section-title em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section-body {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 560px;
+}
+
+/* ─── PROBLEM SECTION ─── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+}
+.problem-image-wrap {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,207,255,0.08);
+}
+.problem-image-wrap img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.6) brightness(0.75);
+  transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.problem-image-wrap:hover img { filter: saturate(0.85) brightness(0.85); transform: scale(1.03); }
+.img-tag {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  background: rgba(3,16,10,0.9);
+  border: 1px solid var(--border2);
+  padding: 6px 14px;
+  border-radius: 100px;
+  backdrop-filter: blur(8px);
+}
+.problem-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.problem-list li {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  transition: all 0.2s;
+}
+.problem-list li:last-child { border-bottom: none; }
+.problem-list li:hover { padding-left: 8px; }
+.list-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(0,207,255,0.08);
+  border: 1px solid rgba(0,207,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.list-text strong { color: var(--text); display: block; font-size: 0.95rem; margin-bottom: 4px; }
+.list-text span { color: var(--muted); font-size: 0.875rem; line-height: 1.6; }
+
+/* ─── SOLUTION SECTION ─── */
+.solution-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(0,0,0,0.4);
+}
+.solution-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+}
+.solution-media {
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+.solution-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  filter: saturate(0.7) brightness(0.65);
+  transition: all 0.8s;
+}
+.solution-media:hover img { filter: saturate(0.9) brightness(0.8); transform: scale(1.04); }
+.solution-media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 50%, var(--card) 100%);
+}
+.solution-content {
+  padding: 60px 56px 60px 40px;
+}
+.solution-items {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 36px;
+}
+.sol-item {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 22px 24px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(3,16,10,0.5);
+  transition: all 0.3s;
+  cursor: default;
+}
+.sol-item:hover {
+  border-color: rgba(26,255,140,0.25);
+  background: rgba(26,255,140,0.04);
+  transform: translateX(6px);
+}
+.sol-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  background: rgba(26,255,140,0.08);
+  border: 1px solid rgba(26,255,140,0.15);
+  padding: 4px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.sol-item strong { color: var(--text); display: block; font-size: 0.95rem; margin-bottom: 5px; }
+.sol-item p { color: var(--muted); font-size: 0.875rem; line-height: 1.65; }
+
+/* ─── TECH CARDS ─── */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.tech-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.tech-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(26,255,140,0.3);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 40px var(--glow);
+}
+.tc-img-wrap { overflow: hidden; position: relative; height: 220px; }
+.tc-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.6) brightness(0.65);
+  transition: all 0.6s;
+}
+.tech-card:hover .tc-img-wrap img { filter: saturate(0.9) brightness(0.8); transform: scale(1.08); }
+.tc-img-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(transparent, var(--card));
+}
+.tc-body { padding: 24px 28px 32px; }
+.tc-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(26,255,140,0.08);
+  border: 1px solid rgba(26,255,140,0.15);
+  padding: 4px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.tc-body h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+.tc-body p {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.tc-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-top: 16px;
+  font-weight: 600;
+  transition: gap 0.2s;
+}
+.tech-card:hover .tc-arrow { gap: 12px; }
+
+/* ─── BENEFITS ─── */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.benefit-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 30px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.benefit-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 80px; height: 80px;
+  background: radial-gradient(var(--glow), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.benefit-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(26,255,140,0.25);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.benefit-card:hover::before { opacity: 1; }
+.benefit-icon {
+  font-size: 2.2rem;
+  margin-bottom: 18px;
+  display: block;
+  filter: drop-shadow(0 0 12px var(--glow));
+}
+.benefit-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.benefit-card p {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ─── TEAM ─── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.team-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.35s;
+  position: relative;
+}
+.team-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(26,255,140,0.3);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px var(--glow);
+}
+.team-top {
+  padding: 44px 32px 36px;
+  text-align: center;
+  position: relative;
+}
+.team-top::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 140px;
+  background: linear-gradient(to bottom, rgba(26,255,140,0.05), transparent);
+}
+.team-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  background: conic-gradient(from 0deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #03100a;
+  box-shadow: 0 0 30px var(--glow);
+  position: relative;
+  z-index: 1;
+}
+.team-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--text);
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+.team-role {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.team-bottom {
+  padding: 0 32px 36px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+.team-bottom p {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.team-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.skill-tag {
+  font-size: 0.72rem;
+  color: var(--accent2);
+  background: rgba(0,207,255,0.07);
+  border: 1px solid rgba(0,207,255,0.15);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 1px;
+}
+
+/* ─── FUTURE ─── */
+.future-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.future-img-wrap {
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+}
+.future-img-wrap img {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  filter: saturate(0.6) brightness(0.65);
+  display: block;
+  transition: all 0.8s;
+}
+.future-img-wrap:hover img { filter: saturate(0.85) brightness(0.8); transform: scale(1.04); }
+.future-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
+}
+.future-item {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  transition: all 0.3s;
+}
+.future-item:hover {
+  border-color: rgba(26,255,140,0.25);
+  transform: translateX(8px);
+  background: rgba(26,255,140,0.03);
+}
+.fi-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: rgba(26,255,140,0.15);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 48px;
+}
+.fi-text strong { color: var(--text); display: block; font-size: 0.95rem; margin-bottom: 6px; }
+.fi-text p { color: var(--muted); font-size: 0.85rem; line-height: 1.65; }
+
+/* ─── FAQ ─── */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 780px;
+  margin: 0 auto;
+}
+.faq-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.faq-item.open { border-color: rgba(26,255,140,0.3); }
+.faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 28px;
+  cursor: pointer;
+  gap: 16px;
+}
+.faq-q span {
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: color 0.2s;
+  line-height: 1.4;
+}
+.faq-q:hover span { color: var(--accent); }
+.faq-toggle {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--accent);
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+.faq-item.open .faq-toggle { transform: rotate(45deg); border-color: var(--accent); background: rgba(26,255,140,0.08); }
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.faq-item.open .faq-a { max-height: 300px; }
+.faq-a-inner {
+  padding: 0 28px 22px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.75;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+/* ─── CONTACT CTA ─── */
+.cta-band {
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 100px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(26,255,140,0.06), transparent);
+}
+.cta-band h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--text);
+  margin-bottom: 16px;
+  position: relative;
+  letter-spacing: -1px;
+}
+.cta-band p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-bottom: 36px;
+  position: relative;
+}
+.cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 48px 24px 32px;
+}
+.footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+.footer-brand h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+.footer-brand p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 280px;
+}
+.footer-col h5 {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 16px;
+}
+.footer-col a {
+  display: block;
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.footer-badges {
+  display: flex;
+  gap: 12px;
+}
+.fbadge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(26,255,140,0.07);
+  border: 1px solid rgba(26,255,140,0.15);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* ═══════════════════════════════
+   INNER PAGES (Green Zone, Serenity, Dashboard, About, Gallery, Team, Resources)
+═══════════════════════════════ */
+.page-hero {
+  padding: calc(var(--nav-h) + 80px) 24px 80px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.page-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+.page-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.12) saturate(0.4);
+}
+.page-hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(3,16,10,0.4), rgba(3,16,10,0.9) 80%, var(--bg));
+}
+.page-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.page-hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(26,255,140,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,255,140,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* TECH PAGE layout */
+.tech-page-content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 70px 24px;
+}
+.tech-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  margin-bottom: 80px;
+}
+.tech-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 32px;
+}
+.tf-item {
+  display: flex;
+  gap: 16px;
+  padding: 20px 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  transition: all 0.3s;
+}
+.tf-item:hover {
+  border-color: rgba(26,255,140,0.25);
+  transform: translateX(6px);
+}
+.tf-icon {
+  font-size: 1.4rem;
+  width: 42px;
+  height: 42px;
+  background: rgba(26,255,140,0.06);
+  border: 1px solid rgba(26,255,140,0.12);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tf-item strong { color: var(--text); display: block; font-size: 0.9rem; margin-bottom: 5px; }
+.tf-item p { color: var(--muted); font-size: 0.85rem; line-height: 1.65; }
+
+.tech-page-img {
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+  position: sticky;
+  top: calc(var(--nav-h) + 30px);
+}
+.tech-page-img img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.7) brightness(0.7);
+}
+
+.tech-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 60px;
+}
+.spec-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 22px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.spec-box:hover {
+  border-color: rgba(26,255,140,0.25);
+  transform: translateY(-4px);
+}
+.spec-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin-bottom: 8px;
+}
+.spec-lbl { font-size: 0.78rem; color: var(--muted); letter-spacing: 1px; }
+
+/* GALLERY */
+.gallery-grid {
+  columns: 3;
+  column-gap: 16px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  display: block;
+}
+.gallery-item img {
+  width: 100%;
+  display: block;
+  filter: saturate(0.65) brightness(0.7);
+  transition: all 0.5s;
+}
+.gallery-item:hover img { filter: saturate(0.9) brightness(0.85); transform: scale(1.04); }
+.gallery-cap {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 16px 14px;
+  background: linear-gradient(transparent, rgba(3,16,10,0.92));
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+}
+.gallery-item:hover .gallery-cap { opacity: 1; transform: translateY(0); }
+
+/* RESOURCES */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.resource-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 32px 28px;
+  transition: all 0.3s;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.resource-card:hover {
+  border-color: rgba(26,255,140,0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.rc-icon {
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  background: rgba(26,255,140,0.07);
+  border: 1px solid rgba(26,255,140,0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.resource-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.resource-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+.rc-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* ─── DIVIDERS ─── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width: 980px) {
+  nav { padding: 0 24px; }
+  .nav-links, .nav-cta { display: none; }
+  #ham { display: flex; }
+  .problem-grid, .solution-grid, .future-wrap { grid-template-columns: 1fr; }
+  .solution-media { min-height: 300px; }
+  .solution-media-overlay { background: linear-gradient(to bottom, transparent 40%, var(--card) 100%); }
+  .tech-grid, .benefits-grid, .team-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .tech-page-grid { grid-template-columns: 1fr; }
+  .tech-page-img { position: static; }
+  .tech-specs-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid { columns: 2; }
+}
+@media(max-width: 600px) {
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .tech-grid, .benefits-grid, .team-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .resources-grid { grid-template-columns: 1fr; }
+  .gallery-grid { columns: 1; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+/* ─── STARTUP OVERLAY ─── */
+#startup {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#startup::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(26,255,140,0.07), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(0,207,255,0.05), transparent 60%);
+}
+#startup::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(26,255,140,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,255,140,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 50% 50%, black, transparent);
+}
+.startup-center {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 680px;
+  padding: 24px;
+  animation: hero-in 0.8s ease both;
+}
+.startup-center .hero-eyebrow { margin-bottom: 24px; }
+.startup-center h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 16px;
+}
+.startup-center h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.startup-center .tagline {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-bottom: 44px;
+  line-height: 1.7;
+}
+.startup-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* Floating orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: float-orb 12s ease-in-out infinite alternate;
+}
+.orb-1 { width: 400px; height: 400px; background: rgba(26,255,140,0.07); top: -100px; right: -100px; animation-delay: 0s; }
+.orb-2 { width: 300px; height: 300px; background: rgba(0,207,255,0.06); bottom: -80px; left: -80px; animation-delay: 3s; }
+@keyframes float-orb {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(40px,30px) scale(1.1); }
+}
+</style>
+</head>
+<body>
+
+<!-- STARTUP OVERLAY -->
+<div id="startup">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="startup-center">
+    <div class="hero-eyebrow">🌿 Urban Future</div>
+    <h1>AIR<br><em>NOVA</em></h1>
+    <p class="tagline">Smarter air. Greener cities.<br>A healthier tomorrow for everyone.</p>
+    <div class="startup-btns">
+      <button class="btn-hero btn-hero-primary" onclick="dismissStartup()">Explore Site</button>
+      <button class="btn-hero btn-hero-ghost" onclick="goTo('about')">About the Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="nav">
+  <a class="nav-brand" onclick="goTo('home')">
+    <div class="brand-mark">🌿</div>
+    <span class="brand-name">AIR NOVA</span>
+  </a>
+
+  <div class="nav-links">
+    <a onclick="goTo('home')" id="nl-home">Home</a>
+    <a onclick="goTo('about')" id="nl-about">About the Project</a>
+    <a onclick="goTo('team')" id="nl-team">The Team</a>
+    <a onclick="goTo('green-zone')" id="nl-green-zone">Green Zone</a>
+    <a onclick="goTo('serenity')" id="nl-serenity">Serenity Tower</a>
+    <a onclick="goTo('dashboard')" id="nl-dashboard">Smart Dashboard</a>
+    <a onclick="goTo('gallery')" id="nl-gallery">Gallery</a>
+    <a onclick="goTo('resources')" id="nl-resources">Resources</a>
+  </div>
+
+  <div class="nav-cta">
+    <button class="btn-pill btn-outline" onclick="goTo('faq')">FAQ</button>
+    <button class="btn-pill btn-solid" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Us</button>
+  </div>
+
+  <!-- Hamburger -->
+  <div id="ham" onclick="toggleMob()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mob-menu">
+  <a onclick="goTo('home');closeMob()">🏠 Home</a>
+  <a onclick="goTo('about');closeMob()">📋 About the Project</a>
+  <a onclick="goTo('team');closeMob()">👥 The Team</a>
+  <a onclick="goTo('green-zone');closeMob()">🌱 Green Zone</a>
+  <a onclick="goTo('serenity');closeMob()">💨 Serenity Tower</a>
+  <a onclick="goTo('dashboard');closeMob()">📊 Smart Dashboard</a>
+  <a onclick="goTo('gallery');closeMob()">🖼️ Gallery</a>
+  <a onclick="goTo('resources');closeMob()">📚 Resources</a>
+  <a onclick="goTo('faq');closeMob()">❓ FAQ</a>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: HOME
+═══════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg-img"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Next-Gen Urban Technology</div>
+      <h1>Breathe<br><em>Again.</em></h1>
+      <p class="hero-sub">AIR NOVA fuses cutting-edge AI, vertical farming, and solar energy to transform how cities breathe, eat, and thrive. Smarter infrastructure. Cleaner air. Local food. Every single day.</p>
+      <div class="hero-actions">
+        <button class="btn-hero btn-hero-primary" onclick="goTo('about')">Discover the Project</button>
+        <button class="btn-hero btn-hero-ghost" onclick="goTo('team')">Meet the Team</button>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="wrap" style="margin-top:-2px; padding-top:0; padding-bottom:80px;">
+    <div class="stats-bar">
+      <div class="stat-cell"><span class="stat-val">90%</span><span class="stat-lbl">Less Water Used</span></div>
+      <div class="stat-cell"><span class="stat-val">40%</span><span class="stat-lbl">CO₂ Reduction</span></div>
+      <div class="stat-cell"><span class="stat-val">365</span><span class="stat-lbl">Days of Harvest</span></div>
+      <div class="stat-cell"><span class="stat-val">0</span><span class="stat-lbl">Pesticides Used</span></div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section class="section-gap" style="background: var(--bg2);">
+    <div class="wrap">
+      <div class="problem-grid">
+        <div class="problem-image-wrap">
+          <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=900&q=85" alt="Urban air pollution" />
+          <div class="img-tag">The Urban Crisis</div>
+        </div>
+        <div>
+          <div class="eyebrow">The Challenge</div>
+          <h2 class="section-title">Why Cities Are <em>Struggling</em></h2>
+          <p class="section-body" style="margin-bottom:32px;">Dense urban environments face converging crises — from toxic air to food insecurity. Business as usual is not an option.</p>
+          <ul class="problem-list">
+            <li>
+              <div class="list-icon">🌫️</div>
+              <div class="list-text"><strong>Air Pollution</strong><span>Vehicle and industrial emissions push CO₂ and particulates to dangerous levels daily.</span></div>
+            </li>
+            <li>
+              <div class="list-icon">🌱</div>
+              <div class="list-text"><strong>No Green Space</strong><span>Land scarcity eliminates local food production and reduces urban biodiversity.</span></div>
+            </li>
+            <li>
+              <div class="list-icon">🏥</div>
+              <div class="list-text"><strong>Rising Health Costs</strong><span>Respiratory illness, malnutrition, and stress climb as urban density increases.</span></div>
+            </li>
+            <li>
+              <div class="list-icon">🚢</div>
+              <div class="list-text"><strong>Long Food Supply Chains</strong><span>Cities import nearly all food, adding massive emissions and reducing freshness.</span></div>
+            </li>
+            <li>
+              <div class="list-icon">⚡</div>
+              <div class="list-text"><strong>Energy Inefficiency</strong><span>Outdated infrastructure wastes resources and deepens climate impact year after year.</span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="section-gap">
+    <div class="wrap">
+      <div class="eyebrow" style="justify-content:center; margin-bottom:12px;">Our Approach</div>
+      <h2 class="section-title" style="text-align:center; margin:0 auto 60px;">An <em>Integrated</em> Urban Solution</h2>
+      <div class="solution-wrap">
+        <div class="solution-grid">
+          <div class="solution-media">
+            <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=900&q=85" alt="Vertical farm" />
+            <div class="solution-media-overlay"></div>
+          </div>
+          <div class="solution-content">
+            <div class="eyebrow">How It Works</div>
+            <h2 class="section-title">Three Systems.<br><em>One Vision.</em></h2>
+            <div class="solution-items">
+              <div class="sol-item">
+                <span class="sol-num">01</span>
+                <div><strong>AI Monitoring</strong><p>Continuously tracks air quality, plant health, and energy in real time — adapting automatically.</p></div>
+              </div>
+              <div class="sol-item">
+                <span class="sol-num">02</span>
+                <div><strong>Vertical Farming</strong><p>Fresh, pesticide-free produce year-round using a fraction of traditional agricultural land.</p></div>
+              </div>
+              <div class="sol-item">
+                <span class="sol-num">03</span>
+                <div><strong>Air Purification</strong><p>Actively filters pollutants while releasing clean, oxygen-rich air into urban environments.</p></div>
+              </div>
+              <div class="sol-item">
+                <span class="sol-num">04</span>
+                <div><strong>Solar Power</strong><p>Entirely solar-powered. Zero carbon operation. No grid dependency.</p></div>
+              </div>
+            </div>
+            <button class="btn-pill btn-solid" style="margin-top:32px;" onclick="goTo('about')">Learn More →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNOLOGIES PREVIEW -->
+  <section class="section-gap" style="background: var(--bg2);">
+    <div class="wrap">
+      <div class="eyebrow">Core Systems</div>
+      <h2 class="section-title">Technologies Powering <em>AIR NOVA</em></h2>
+      <div class="tech-grid" style="margin-top:40px;">
+        <div class="tech-card" onclick="goTo('green-zone')">
+          <div class="tc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700&q=80" alt="Green Zone" />
+          </div>
+          <div class="tc-body">
+            <span class="tc-tag">AI + Agriculture</span>
+            <h3>Green Zone</h3>
+            <p>An AI-controlled greenhouse that monitors crops with ML, auto-adjusting water, light and nutrients.</p>
+            <div class="tc-arrow">Explore →</div>
+          </div>
+        </div>
+        <div class="tech-card" onclick="goTo('serenity')">
+          <div class="tc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1569163139394-de4e4d43c94a?w=700&q=80" alt="Serenity Tower" />
+          </div>
+          <div class="tc-body">
+            <span class="tc-tag">Air Purification</span>
+            <h3>Serenity Tower</h3>
+            <p>A vertical purification tower scrubbing CO₂ and particles, returning clean oxygen to city air.</p>
+            <div class="tc-arrow">Explore →</div>
+          </div>
+        </div>
+        <div class="tech-card" onclick="goTo('dashboard')">
+          <div class="tc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80" alt="Smart Dashboard" />
+          </div>
+          <div class="tc-body">
+            <span class="tc-tag">Smart Analytics</span>
+            <h3>Smart Dashboard</h3>
+            <p>Real-time analytics for city planners — air quality, food output, energy, and sustainability in one view.</p>
+            <div class="tc-arrow">Explore →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="section-gap">
+    <div class="wrap">
+      <div class="eyebrow">Why It Matters</div>
+      <h2 class="section-title" style="max-width:500px;">Benefits for People <em>& Cities</em></h2>
+      <div class="benefits-grid" style="margin-top:48px;">
+        <div class="benefit-card"><span class="benefit-icon">🌬️</span><h3>Cleaner Air</h3><p>Actively removes harmful pollutants and particulates from urban air, reducing respiratory illness.</p></div>
+        <div class="benefit-card"><span class="benefit-icon">🥬</span><h3>Fresh Local Food</h3><p>Year-round pesticide-free produce grown right in the city — no imports, no long-haul emissions.</p></div>
+        <div class="benefit-card"><span class="benefit-icon">💧</span><h3>90% Less Water</h3><p>Hydroponic systems use a fraction of traditional agriculture's water demand.</p></div>
+        <div class="benefit-card"><span class="benefit-icon">☀️</span><h3>Solar Powered</h3><p>100% renewable energy. No carbon emissions, no utility bills, no compromise.</p></div>
+        <div class="benefit-card"><span class="benefit-icon">📊</span><h3>Real-Time Insight</h3><p>City planners and residents access live data for smarter, faster decisions.</p></div>
+        <div class="benefit-card"><span class="benefit-icon">🏙️</span><h3>Urban Wellbeing</h3><p>Healthier, happier communities — mentally, physically, and environmentally resilient.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUTURE TEASER -->
+  <section class="section-gap" style="background: var(--bg2);">
+    <div class="wrap">
+      <div class="future-wrap">
+        <div>
+          <div class="eyebrow">What's Next</div>
+          <h2 class="section-title">Our Vision for the <em>Future</em></h2>
+          <p class="section-body" style="margin-bottom:0;">We're building toward a world where clean air and fresh food are universal rights — powered by AI, sustained by nature.</p>
+          <div class="future-items">
+            <div class="future-item"><span class="fi-num">01</span><div class="fi-text"><strong>Smarter, Greener Cities</strong><p>Fully sustainable urban ecosystems connected by AI and renewable energy.</p></div></div>
+            <div class="future-item"><span class="fi-num">02</span><div class="fi-text"><strong>Year-Round Food Security</strong><p>Local vertical farms feeding populations regardless of season or climate.</p></div></div>
+            <div class="future-item"><span class="fi-num">03</span><div class="fi-text"><strong>Global Scalability</strong><p>AIR NOVA deployments in cities worldwide, making our solution a universal standard.</p></div></div>
+          </div>
+        </div>
+        <div class="future-img-wrap">
+          <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=900&q=85" alt="Smart city of the future" />
+          <div class="img-tag">Tomorrow's City</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <div id="contact" class="cta-band">
+    <h2>Ready to <em style="font-style:italic; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Transform</em> Your City?</h2>
+    <p>Partner with AIR NOVA to bring clean air and local food to your community.</p>
+    <div class="cta-actions">
+      <button class="btn-hero btn-hero-primary">Get in Touch</button>
+      <button class="btn-hero btn-hero-ghost" onclick="goTo('about')">Learn More</button>
+    </div>
+  </div>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════════════════════════
+     PAGE: ABOUT
+═══════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=1400&q=80" alt="About AIR NOVA" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">About the Project</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;">The Story Behind <em>AIR NOVA</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:640px; margin:20px auto 0;">A student-led initiative to solve the defining urban challenge of our generation — combining AI, vertical farming, and clean energy into one cohesive system.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:70px; padding-bottom:100px;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; margin-bottom:80px;">
+      <div>
+        <div class="eyebrow">Our Mission</div>
+        <h2 class="section-title">Why We <em>Built This</em></h2>
+        <p class="section-body" style="max-width:100%; margin-bottom:20px;">Urban air pollution kills millions every year. Cities struggle to feed their populations sustainably. Existing solutions are fragmented, expensive, and often ineffective. We believed there had to be a better way.</p>
+        <p class="section-body" style="max-width:100%; margin-bottom:20px;">AIR NOVA started as an idea — what if we could monitor air quality, purify it, grow local food, and power it all with solar energy, all in one integrated urban system?</p>
+        <p class="section-body" style="max-width:100%;">Three students with skills in AI, design, and hardware came together to make it real. The result is AIR NOVA — a modular, AI-driven urban platform that cities can deploy today.</p>
+      </div>
+      <div>
+        <div class="solution-items">
+          <div class="sol-item"><span class="sol-num">Mission</span><div><strong>Clean Air for Everyone</strong><p>Every person deserves to breathe clean air. We make that possible through technology and design.</p></div></div>
+          <div class="sol-item"><span class="sol-num">Vision</span><div><strong>Self-Sufficient Cities</strong><p>Cities that grow their own food, clean their own air, and power themselves sustainably.</p></div></div>
+          <div class="sol-item"><span class="sol-num">Values</span><div><strong>Open & Scalable</strong><p>Built to be affordable, modular, and globally deployable — from Kathmandu to São Paulo.</p></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div style="padding-top:80px;">
+      <div class="eyebrow" style="justify-content:center; margin-bottom:12px;">The System</div>
+      <h2 class="section-title" style="text-align:center; margin-bottom:48px;">How Everything <em>Connects</em></h2>
+      <div class="tech-grid">
+        <div class="tech-card" onclick="goTo('green-zone')"><div class="tc-img-wrap"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700&q=80" alt="Green Zone"/></div><div class="tc-body"><span class="tc-tag">Module 1</span><h3>Green Zone</h3><p>AI-powered vertical farming that produces food year-round using minimal resources.</p><div class="tc-arrow">Full Details →</div></div></div>
+        <div class="tech-card" onclick="goTo('serenity')"><div class="tc-img-wrap"><img src="https://images.unsplash.com/photo-1569163139394-de4e4d43c94a?w=700&q=80" alt="Serenity Tower"/></div><div class="tc-body"><span class="tc-tag">Module 2</span><h3>Serenity Tower</h3><p>Vertical air purification removing CO₂ and particulates from city air continuously.</p><div class="tc-arrow">Full Details →</div></div></div>
+        <div class="tech-card" onclick="goTo('dashboard')"><div class="tc-img-wrap"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80" alt="Smart Dashboard"/></div><div class="tc-body"><span class="tc-tag">Module 3</span><h3>Smart Dashboard</h3><p>The brain tying everything together — real-time analytics for city-wide decision making.</p><div class="tc-arrow">Full Details →</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: TEAM
+═══════════════════════════════ -->
+<div class="page" id="page-team">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400&q=80" alt="The Team" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">The People</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;">Meet the <em>Team</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:580px; margin:20px auto 0;">Three specialists who together cover every layer of the AIR NOVA system — from code and AI to hardware and design.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:70px; padding-bottom:100px;">
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-top">
+          <div class="team-avatar">P</div>
+          <h3>Pranav</h3>
+          <span class="team-role">Coder & Invisionator</span>
+        </div>
+        <div class="team-bottom">
+          <p>Pranav discovered coding early, studied at Codingal, and leads AIR NOVA's software and AI architecture. His curiosity and technical drive are at the heart of every system we build — from machine learning models to the platform's core logic.</p>
+          <div class="team-skills">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Machine Learning</span>
+            <span class="skill-tag">System Architecture</span>
+            <span class="skill-tag">AI Vision</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-top">
+          <div class="team-avatar" style="background:conic-gradient(from 0deg, var(--accent2), var(--accent3), var(--accent), var(--accent2));">A</div>
+          <h3>Aawarth</h3>
+          <span class="team-role">Designer & UI Lead</span>
+        </div>
+        <div class="team-bottom">
+          <p>Aawarth brings AIR NOVA to life visually. Skilled in UI/UX and frontend development, he ensures every interface is intuitive, compelling, and accessible — from the Smart Dashboard to the public website, every pixel is intentional.</p>
+          <div class="team-skills">
+            <span class="skill-tag">UI/UX Design</span>
+            <span class="skill-tag">Frontend Dev</span>
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Accessibility</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-top">
+          <div class="team-avatar" style="background:conic-gradient(from 0deg, var(--accent3), var(--accent), var(--accent2), var(--accent3));">Am</div>
+          <h3>Amog</h3>
+          <span class="team-role">Hardware Expert</span>
+        </div>
+        <div class="team-bottom">
+          <p>Amog's passion for mechanics and robotics drives AIR NOVA's physical layer. He designs and manages all hardware systems — from sensor arrays to structural engineering — ensuring maximum reliability, precision, and real-world performance.</p>
+          <div class="team-skills">
+            <span class="skill-tag">Robotics</span>
+            <span class="skill-tag">Electronics</span>
+            <span class="skill-tag">Sensor Systems</span>
+            <span class="skill-tag">Prototyping</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: GREEN ZONE
+═══════════════════════════════ -->
+<div class="page" id="page-green-zone">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1400&q=80" alt="Green Zone" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">Module 01 · AI + Agriculture</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;"><em>Green Zone</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:580px; margin:20px auto 0;">An AI-controlled greenhouse that automatically monitors, adjusts, and optimizes crop growth year-round — with zero pesticides.</p>
+    </div>
+  </div>
+  <div class="tech-page-content">
+    <div class="tech-page-grid">
+      <div>
+        <div class="eyebrow">How It Works</div>
+        <h2 class="section-title">Farming, <em>Reimagined</em></h2>
+        <p class="section-body">Green Zone uses machine learning to continuously analyze crop data from an array of sensors. It automatically adjusts irrigation, LED spectrum and intensity, nutrient dosing, and temperature — all in real time, with no human intervention needed.</p>
+        <div class="tech-feature-list">
+          <div class="tf-item"><div class="tf-icon">🧠</div><div><strong>ML Crop Monitoring</strong><p>Computer vision and sensor fusion detect early signs of stress, disease, or nutrient deficiency before they become problems.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">💧</div><div><strong>Precision Irrigation</strong><p>Hydroponic delivery systems give each plant exactly what it needs — reducing water use by up to 90% vs. traditional farming.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">💡</div><div><strong>Adaptive LED Lighting</strong><p>Spectrum-tunable LEDs adjust for each growth stage — seedling, vegetative, flowering — maximizing photosynthesis efficiency.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">🌡️</div><div><strong>Climate Control</strong><p>Automated HVAC maintains ideal temperature, humidity, and CO₂ concentration for continuous high-yield growth.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">☀️</div><div><strong>Solar Powered</strong><p>Every watt is sourced from on-site solar panels. Green Zone produces food with zero grid energy consumption.</p></div></div>
+        </div>
+      </div>
+      <div class="tech-page-img">
+        <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=85" alt="Vertical Farm Interior" />
+      </div>
+    </div>
+    <div class="tech-specs-grid">
+      <div class="spec-box"><span class="spec-val">90%</span><span class="spec-lbl">Less Water</span></div>
+      <div class="spec-box"><span class="spec-val">365</span><span class="spec-lbl">Days Harvest</span></div>
+      <div class="spec-box"><span class="spec-val">0</span><span class="spec-lbl">Pesticides</span></div>
+      <div class="spec-box"><span class="spec-val">3×</span><span class="spec-lbl">Higher Yield</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: SERENITY TOWER
+═══════════════════════════════ -->
+<div class="page" id="page-serenity">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1569163139394-de4e4d43c94a?w=1400&q=80" alt="Serenity Tower" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">Module 02 · Air Purification</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;"><em>Serenity Tower</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:580px; margin:20px auto 0;">A vertical air purification system that actively scrubs CO₂ and pollutants from urban air, returning clean oxygen to the city.</p>
+    </div>
+  </div>
+  <div class="tech-page-content">
+    <div class="tech-page-grid">
+      <div>
+        <div class="eyebrow">The Technology</div>
+        <h2 class="section-title">Urban Air, <em>Restored</em></h2>
+        <p class="section-body">Serenity Tower draws in polluted urban air through multi-stage filtration. Photocatalytic oxidation, HEPA filtration, and activated carbon layers work in concert to remove particulates, VOCs, CO₂, and biological contaminants.</p>
+        <div class="tech-feature-list">
+          <div class="tf-item"><div class="tf-icon">🔬</div><div><strong>Multi-Stage Filtration</strong><p>HEPA + activated carbon + photocatalytic layers remove PM2.5, PM10, VOCs, NOx, and biological particles.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">🌬️</div><div><strong>Continuous Operation</strong><p>Processes thousands of cubic meters of air per hour — quietly and continuously, day and night.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">📡</div><div><strong>Air Quality Sensing</strong><p>Real-time sensor arrays detect pollution spikes and increase purification intensity automatically.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">🌿</div><div><strong>Biophilic Design</strong><p>Living wall integration enhances natural air scrubbing while creating green visual anchors in urban spaces.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">🔋</div><div><strong>Energy Recovery</strong><p>Heat exchangers recover thermal energy from exhaust, feeding it back into the system for near-zero net energy use.</p></div></div>
+        </div>
+      </div>
+      <div class="tech-page-img">
+        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=85" alt="Urban Air Quality" />
+      </div>
+    </div>
+    <div class="tech-specs-grid">
+      <div class="spec-box"><span class="spec-val">40%</span><span class="spec-lbl">CO₂ Reduction</span></div>
+      <div class="spec-box"><span class="spec-val">99%</span><span class="spec-lbl">PM2.5 Removal</span></div>
+      <div class="spec-box"><span class="spec-val">24/7</span><span class="spec-lbl">Operation</span></div>
+      <div class="spec-box"><span class="spec-val">≈0</span><span class="spec-lbl">Net Energy Use</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: SMART DASHBOARD
+═══════════════════════════════ -->
+<div class="page" id="page-dashboard">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80" alt="Smart Dashboard" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">Module 03 · Smart Analytics</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;"><em>Smart Dashboard</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:580px; margin:20px auto 0;">The brain of AIR NOVA — a real-time analytics platform giving cities complete visibility into air, food, and energy systems.</p>
+    </div>
+  </div>
+  <div class="tech-page-content">
+    <div class="tech-page-grid">
+      <div>
+        <div class="eyebrow">The Intelligence Layer</div>
+        <h2 class="section-title">Data-Driven <em>Cities</em></h2>
+        <p class="section-body">The Smart Dashboard aggregates data from every AIR NOVA module and presents it in an intuitive interface for city planners, facility managers, and residents. Anomaly detection, predictive alerts, and trend analysis are built in.</p>
+        <div class="tech-feature-list">
+          <div class="tf-item"><div class="tf-icon">📊</div><div><strong>Live Air Quality Map</strong><p>City-wide AQI heatmaps updated every 60 seconds from distributed sensor nodes.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">🌾</div><div><strong>Crop Health Tracker</strong><p>Per-plant growth metrics, yield projections, and automated harvest scheduling.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">⚡</div><div><strong>Energy Monitoring</strong><p>Solar generation, consumption, and storage data with efficiency recommendations.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">🚨</div><div><strong>Predictive Alerts</strong><p>ML models flag potential issues before they occur — equipment, crop, or air quality anomalies.</p></div></div>
+          <div class="tf-item"><div class="tf-icon">📱</div><div><strong>Public Access App</strong><p>Residents check local air quality, food availability, and sustainability scores from their phones.</p></div></div>
+        </div>
+      </div>
+      <div class="tech-page-img">
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=85" alt="Data Analytics" />
+      </div>
+    </div>
+    <div class="tech-specs-grid">
+      <div class="spec-box"><span class="spec-val">60s</span><span class="spec-lbl">Update Interval</span></div>
+      <div class="spec-box"><span class="spec-val">100+</span><span class="spec-lbl">Data Metrics</span></div>
+      <div class="spec-box"><span class="spec-val">99.9%</span><span class="spec-lbl">Uptime SLA</span></div>
+      <div class="spec-box"><span class="spec-val">∞</span><span class="spec-lbl">Scalable Nodes</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: GALLERY
+═══════════════════════════════ -->
+<div class="page" id="page-gallery">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=1400&q=80" alt="Gallery" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">Visual Story</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;">Our <em>Gallery</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:560px; margin:20px auto 0;">A visual exploration of AIR NOVA's technology, team, and the cities we're working to transform.</p>
+    </div>
+  </div>
+  <div style="padding-top:60px;">
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80" alt="Vertical Farm"/><div class="gallery-cap">Green Zone · Vertical Farm</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80" alt="City Pollution"/><div class="gallery-cap">Urban Pollution · The Problem</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&q=80" alt="Indoor Farm"/><div class="gallery-cap">Hydroponic Growing · Pesticide-Free</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&q=80" alt="Smart City"/><div class="gallery-cap">Smart City · Tomorrow's Vision</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="Analytics"/><div class="gallery-cap">Smart Dashboard · City Analytics</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1569163139394-de4e4d43c94a?w=600&q=80" alt="Serenity Tower"/><div class="gallery-cap">Serenity Tower · Air Purification</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600&q=80" alt="Lush Plants"/><div class="gallery-cap">Year-Round Harvest · Zero Seasons</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80" alt="Data"/><div class="gallery-cap">Real-Time Data · Live Intelligence</div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=600&q=80" alt="Green Architecture"/><div class="gallery-cap">Green Architecture · Urban Design</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: RESOURCES
+═══════════════════════════════ -->
+<div class="page" id="page-resources">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&q=80" alt="Resources" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">Knowledge Base</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;">Project <em>Resources</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:560px; margin:20px auto 0;">Research, reports, and reference materials behind the AIR NOVA initiative.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:70px; padding-bottom:100px;">
+    <div class="resources-grid">
+      <div class="resource-card"><div class="rc-icon">📄</div><div><span class="rc-tag">Research Paper</span><h3>Urban Air Quality & Public Health</h3><p>A comprehensive review of how air pollution affects urban populations and what measurable improvements clean-air technology delivers.</p></div></div>
+      <div class="resource-card"><div class="rc-icon">🌱</div><div><span class="rc-tag">Technical Report</span><h3>Vertical Farming Yield Analysis</h3><p>Comparative study of hydroponic vertical farming vs. traditional agriculture — water, yield, land use, and nutritional quality metrics.</p></div></div>
+      <div class="resource-card"><div class="rc-icon">🤖</div><div><span class="rc-tag">White Paper</span><h3>AI in Urban Agriculture</h3><p>How machine learning transforms crop monitoring, from sensor fusion to predictive yield modeling and automated environmental control.</p></div></div>
+      <div class="resource-card"><div class="rc-icon">☀️</div><div><span class="rc-tag">Case Study</span><h3>Solar Powering Urban Systems</h3><p>Analysis of solar energy integration in urban infrastructure, with cost, output, and carbon offset models for city-scale deployment.</p></div></div>
+      <div class="resource-card"><div class="rc-icon">🏙️</div><div><span class="rc-tag">Policy Brief</span><h3>Smart City Infrastructure Planning</h3><p>Framework for cities considering integrated air quality and food security systems — regulatory, financial, and operational guidance.</p></div></div>
+      <div class="resource-card"><div class="rc-icon">📊</div><div><span class="rc-tag">Data Sheet</span><h3>AIR NOVA System Specifications</h3><p>Complete technical specifications for all three AIR NOVA modules — sensor arrays, energy requirements, processing, and outputs.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE: FAQ
+═══════════════════════════════ -->
+<div class="page" id="page-faq">
+  <div class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=1400&q=80" alt="FAQ" />
+    </div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="hero-eyebrow" style="display:inline-flex; margin-bottom:24px;">Common Questions</div>
+      <h1 class="section-title" style="font-size:clamp(2.5rem,7vw,5rem); letter-spacing:-2px;">Frequently <em>Asked</em></h1>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.9; max-width:560px; margin:20px auto 0;">Everything you need to know about AIR NOVA and our approach to urban sustainability.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:70px; padding-bottom:100px;">
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span>What is AIR NOVA?</span><div class="faq-toggle">+</div></div>
+        <div class="faq-a"><div class="faq-a-inner">AIR NOVA is an AI-driven urban platform combining air purification, vertical farming, and solar energy to make cities healthier, more sustainable, and self-sufficient. It consists of three integrated modules: Green Zone, Serenity Tower, and Smart Dashboard.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>How does Green Zone work?</span><div class="faq-toggle">+</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Green Zone uses machine learning and sensor fusion to continuously monitor crops in a controlled vertical farm environment. It automatically adjusts water delivery, LED lighting spectrum, and nutrient levels for optimal growth year-round — with no pesticides and 90% less water than conventional farming.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>What does Serenity Tower actually remove from the air?</span><div class="faq-toggle">+</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Serenity Tower uses multi-stage filtration — HEPA, activated carbon, and photocatalytic oxidation layers — to remove PM2.5, PM10, volatile organic compounds (VOCs), nitrogen oxides (NOx), CO₂, and biological contaminants including bacteria and mold spores.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Is AIR NOVA entirely solar powered?</span><div class="faq-toggle">+</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Yes. All AIR NOVA modules are designed to operate entirely on on-site solar generation. Excess energy is stored in battery systems for overnight and low-light operation. Energy recovery systems within Serenity Tower further reduce net consumption.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Who built AIR NOVA?</span><div class="faq-toggle">+</div></div>
+        <div class="faq-a"><div class="faq-a-inner">AIR NOVA was created by three students: Pranav (software and AI), Aawarth (design and UI), and Amog (hardware and robotics). Each member brings deep specialist knowledge, and together they cover every layer of the AIR NOVA system.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Can AIR NOVA be deployed in any city?</span><div class="faq-toggle">+</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Yes. AIR NOVA is designed to be modular and scalable. Individual modules can be deployed independently or as a complete integrated system. The platform adapts to varying urban densities, climates, and local regulations — from small districts to city-wide networks.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>How does the Smart Dashboard help city planners?</span><div class="faq-toggle">+</div></div>
+        <div class="faq-a"><div class="faq-a-inner">The Smart Dashboard aggregates real-time data from all AIR NOVA modules and presents it in a single intuitive interface. City planners gain live air quality maps, food production metrics, energy analytics, predictive maintenance alerts, and sustainability scoring — enabling data-driven urban policy decisions.</div></div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:60px;">
+      <p style="color:var(--muted); margin-bottom:24px;">Still have questions? We'd love to hear from you.</p>
+      <button class="btn-hero btn-hero-primary">Contact the Team</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     SHARED FOOTER (all pages)
+═══════════════════════════════ -->
+<footer id="main-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h4>AIR NOVA</h4>
+      <p>An AI-driven urban platform transforming how cities breathe, eat, and thrive. Built by students, designed for humanity.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Navigate</h5>
+      <a onclick="goTo('home')">Home</a>
+      <a onclick="goTo('about')">About the Project</a>
+      <a onclick="goTo('team')">The Team</a>
+      <a onclick="goTo('gallery')">Gallery</a>
+    </div>
+    <div class="footer-col">
+      <h5>Technologies</h5>
+      <a onclick="goTo('green-zone')">Green Zone</a>
+      <a onclick="goTo('serenity')">Serenity Tower</a>
+      <a onclick="goTo('dashboard')">Smart Dashboard</a>
+    </div>
+    <div class="footer-col">
+      <h5>Learn More</h5>
+      <a onclick="goTo('resources')">Resources</a>
+      <a onclick="goTo('faq')">FAQ</a>
+      <a>Contact Us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AIR NOVA. Smarter cities. Cleaner air. Greener future.</span>
+    <div class="footer-badges">
+      <span class="fbadge">Solar Powered</span>
+      <span class="fbadge">Zero Pesticides</span>
+      <span class="fbadge">AI Driven</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── ROUTER ───
+const pages = {
+  'home': 'page-home',
+  'about': 'page-about',
+  'team': 'page-team',
+  'green-zone': 'page-green-zone',
+  'serenity': 'page-serenity',
+  'dashboard': 'page-dashboard',
+  'gallery': 'page-gallery',
+  'resources': 'page-resources',
+  'faq': 'page-faq',
+};
+
+function goTo(name) {
+  Object.values(pages).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('active');
+  });
+  const target = document.getElementById(pages[name]);
+  if(target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Update nav active
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const nl = document.getElementById('nl-' + name);
+  if(nl) nl.classList.add('active');
+  // Close startup
+  document.getElementById('startup').style.display = 'none';
+}
+
+function dismissStartup() {
+  document.getElementById('startup').style.display = 'none';
+}
+
+// ─── HAMBURGER ───
+function toggleMob() {
+  document.getElementById('ham').classList.toggle('open');
+  document.getElementById('mob-menu').classList.toggle('open');
+}
+function closeMob() {
+  document.getElementById('ham').classList.remove('open');
+  document.getElementById('mob-menu').classList.remove('open');
+}
+
+// ─── NAV SCROLL ───
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ─── FAQ ACCORDION ───
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    item.classList.toggle('open');
+  });
+});
+
+// ─── STARTUP ON LOAD ───
+// Show startup, auto-dismiss after 0 (user must click)
+// But if user scrolls or clicks elsewhere, dismiss
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') dismissStartup();
+});
+</script>
+</body>
+</html>
